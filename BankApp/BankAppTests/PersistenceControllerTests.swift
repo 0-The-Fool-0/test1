@@ -9,12 +9,14 @@ import Testing
 
 struct PersistenceControllerTests {
     @Test func inMemoryStoreLoadsSuccessfully() {
-        #expect(TestPersistence.controller.container.persistentStoreCoordinator.persistentStores.isEmpty == false)
+        let controller = TestPersistence.makeInMemory()
+        #expect(controller.container.persistentStoreCoordinator.persistentStores.isEmpty == false)
     }
 
     @Test func seededStoreContainsDemoUser() {
-        TestPersistence.makeSeededSession()
-        let count = (try? TestPersistence.viewContext.count(for: User.fetchRequest())) ?? 0
+        let (controller, _) = TestPersistence.makeSeeded()
+        let context = controller.container.viewContext
+        let count = (try? context.count(for: User.fetchRequest())) ?? 0
         #expect(count >= 1)
     }
 }

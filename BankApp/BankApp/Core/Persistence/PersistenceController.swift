@@ -9,7 +9,7 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
 
-    /// Single in-memory stack for XCTest host and `-UITesting` launches.
+    /// Single in-memory stack for `-UITesting` launches.
     static let testing = PersistenceController(inMemory: true)
 
     @MainActor
@@ -24,10 +24,24 @@ struct PersistenceController {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
 
+    private static let managedObjectModel: NSManagedObjectModel = {
+        let bundle = Bundle(for: CoreDataBundleMarker.self)
+        let modelURL = bundle.url(forResource: "BankApp", withExtension: "momd")
+            ?? bundle.url(forResource: "BankApp", withExtension: "mom")
+        guard let modelURL,
+              let model = NSManagedObjectModel(contentsOf: modelURL) else {
+            fatalError("BankApp Core Data model not found in bundle \(bundle.bundlePath)")
+        }
+        return model
+    }()
+
     let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "BankApp")
+        container = NSPersistentContainer(
+            name: "BankApp",
+            managedObjectModel: Self.managedObjectModel
+        )
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         } else {
@@ -43,3 +57,5 @@ struct PersistenceController {
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
 }
+
+private final class CoreDataBundleMarker {}

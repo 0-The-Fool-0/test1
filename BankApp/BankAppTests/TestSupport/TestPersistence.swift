@@ -6,39 +6,20 @@
 import CoreData
 @testable import BankApp
 
-/// Single in-memory Core Data stack for the unit-test process.
-/// Avoids "Multiple NSEntityDescriptions" crashes when tests run in parallel in one host.
+/// Fresh in-memory Core Data stack per call (shared model, isolated store).
 enum TestPersistence {
-    static let controller = PersistenceController.testing
-
-    static var viewContext: NSManagedObjectContext {
-        controller.container.viewContext
+    static func makeInMemory() -> PersistenceController {
+        PersistenceController(inMemory: true)
     }
 
-    static func reset() {
-        viewContext.performAndWait {
-            let entityNames = ["Account", "User", "Branch", "ExchangeRate"]
-            for name in entityNames {
-                let request = NSFetchRequest<NSFetchRequestResult>(entityName: name)
-                request.includesPropertyValues = false
-                request.resultType = .managedObjectResultType
-                if let objects = try? viewContext.fetch(request) as? [NSManagedObject] {
-                    objects.forEach { viewContext.delete($0) }
-                }
-            }
-            if viewContext.hasChanges {
-                try? viewContext.save()
-            }
-        }
-    }
-
-    static func makeSeededSession() -> UserSession {
-        reset()
-        DataSeedService(context: viewContext).seedIfNeeded()
-        guard let session = AuthService(context: viewContext)
+    static func makeSeeded() -> (PersistenceController, UserSession) {
+        let controller = makeInMemory()
+        let context = controller.container.viewContext
+        DataSeedService(context: context).seedIfNeeded()
+        guard let session = AuthService(context: context)
             .validate(login: "elena.kuznetsova", password: "demo1234") else {
             fatalError("Seed user must be available for tests")
         }
-        return session
+        return (controller, session)
     }
 }

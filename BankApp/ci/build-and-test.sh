@@ -18,10 +18,12 @@ xcodebuild test \
   -scheme "$SCHEME" \
   -testPlan "$TEST_PLAN" \
   -only-test-configuration "Unit Tests" \
+  -only-testing:BankAppTests \
   -destination "${DESTINATION}" \
   -configuration Debug \
   CODE_SIGNING_ALLOWED=NO \
   -enableCodeCoverage YES \
+  -parallel-testing-enabled NO \
   -maximum-parallel-testing-workers 1 \
   -resultBundlePath TestResults-Unit.xcresult
 
@@ -35,6 +37,7 @@ xcodebuild test \
   -scheme "$SCHEME" \
   -testPlan "$TEST_PLAN" \
   -only-test-configuration "UI Tests" \
+  -only-testing:BankAppUITests \
   -destination "${DESTINATION}" \
   -configuration Debug \
   CODE_SIGNING_ALLOWED=NO \

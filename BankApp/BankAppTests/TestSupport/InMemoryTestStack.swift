@@ -8,7 +8,6 @@ import CoreData
 
 enum InMemoryTestStack {
     static func makeSeeded() -> (PersistenceController, UserSession) {
-        let session = TestPersistence.makeSeededSession()
-        return (TestPersistence.controller, session)
+        TestPersistence.makeSeeded()
     }
 }

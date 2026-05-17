@@ -9,8 +9,8 @@ import Testing
 
 struct BranchServiceTests {
     @Test func fetchAllBranchesReturnsEmptyWithoutSeed() {
-        TestPersistence.reset()
-        let service = BranchService(context: TestPersistence.viewContext)
+        let persistence = TestPersistence.makeInMemory()
+        let service = BranchService(context: persistence.container.viewContext)
 
         #expect(service.fetchAllBranches().isEmpty)
     }

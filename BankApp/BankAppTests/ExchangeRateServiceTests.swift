@@ -9,8 +9,8 @@ import Testing
 
 struct ExchangeRateServiceTests {
     @Test func fetchRatesReturnsEmptyWhenDatabaseIsEmpty() {
-        TestPersistence.reset()
-        let service = ExchangeRateService(context: TestPersistence.viewContext)
+        let persistence = TestPersistence.makeInMemory()
+        let service = ExchangeRateService(context: persistence.container.viewContext)
 
         #expect(service.fetchRates().isEmpty)
     }

@@ -69,6 +69,7 @@ jobs:
             -configuration Debug \
             CODE_SIGNING_ALLOWED=NO \
             -enableCodeCoverage YES \
+            -parallel-testing-enabled NO \
             -maximum-parallel-testing-workers 1 \
             -resultBundlePath TestResults-Unit.xcresult
 

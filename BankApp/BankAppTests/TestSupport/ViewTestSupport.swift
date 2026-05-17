@@ -20,8 +20,8 @@ enum ViewTestSupport {
 
     @MainActor
     static func seededDependencies() -> (AppDependencies, SessionStore, UserSession) {
-        let session = TestPersistence.makeSeededSession()
-        let dependencies = AppDependencies(persistence: TestPersistence.controller)
+        let (controller, session) = TestPersistence.makeSeeded()
+        let dependencies = AppDependencies(persistence: controller)
         return (dependencies, SessionStore(), session)
     }
 }

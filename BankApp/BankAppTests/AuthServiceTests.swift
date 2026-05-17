@@ -9,8 +9,8 @@ import Testing
 
 struct AuthServiceTests {
     @Test func validateReturnsSessionForDemoUser() {
-        let expected = TestPersistence.makeSeededSession()
-        let auth = AuthService(context: TestPersistence.viewContext)
+        let (persistence, expected) = TestPersistence.makeSeeded()
+        let auth = AuthService(context: persistence.container.viewContext)
 
         let result = auth.validate(login: "elena.kuznetsova", password: "demo1234")
 
@@ -18,15 +18,15 @@ struct AuthServiceTests {
     }
 
     @Test func validateReturnsNilForUnknownLogin() {
-        TestPersistence.makeSeededSession()
-        let auth = AuthService(context: TestPersistence.viewContext)
+        let (persistence, _) = TestPersistence.makeSeeded()
+        let auth = AuthService(context: persistence.container.viewContext)
 
         #expect(auth.validate(login: "nobody", password: "demo1234") == nil)
     }
 
     @Test func validateReturnsNilForWrongPassword() {
-        TestPersistence.makeSeededSession()
-        let auth = AuthService(context: TestPersistence.viewContext)
+        let (persistence, _) = TestPersistence.makeSeeded()
+        let auth = AuthService(context: persistence.container.viewContext)
 
         #expect(auth.validate(login: "elena.kuznetsova", password: "wrong") == nil)
     }

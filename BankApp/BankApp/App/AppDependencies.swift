@@ -25,14 +25,19 @@ final class AppDependencies: ObservableObject {
 
     init(persistence: PersistenceController? = nil) {
         let resolvedPersistence = persistence ?? {
-            if Self.isUITesting || PersistenceController.isRunningUnitTests {
+            if Self.isUITesting {
+                return .testing
+            }
+            if PersistenceController.isRunningUnitTests {
                 return .testing
             }
             return .shared
         }()
         self.persistence = resolvedPersistence
         let context = resolvedPersistence.container.viewContext
-        DataSeedService(context: context).seedIfNeeded()
+        if !PersistenceController.isRunningUnitTests {
+            DataSeedService(context: context).seedIfNeeded()
+        }
         authService = AuthService(context: context)
         accountService = AccountService(context: context)
         exchangeRateService = ExchangeRateService(context: context)

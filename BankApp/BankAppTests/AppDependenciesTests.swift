@@ -10,8 +10,7 @@ import Testing
 @MainActor
 struct AppDependenciesTests {
     @Test func initWiresServicesAndSeedsOnFirstLaunch() {
-        TestPersistence.reset()
-        let dependencies = AppDependencies(persistence: TestPersistence.controller)
+        let dependencies = AppDependencies(persistence: TestPersistence.makeInMemory())
 
         #expect(dependencies.authService.validate(login: "", password: "") == nil)
         #expect(dependencies.accountService.fetchVisibleAccounts(for: UUID()).isEmpty)

@@ -9,8 +9,8 @@ import Testing
 
 struct AccountServiceMappingTests {
     @Test func fetchVisibleAccountsSkipsInvalidRecords() throws {
-        let (_, session) = InMemoryTestStack.makeSeeded()
-        let context = TestPersistence.viewContext
+        let (persistence, session) = InMemoryTestStack.makeSeeded()
+        let context = persistence.container.viewContext
         let userRequest = User.fetchRequest()
         userRequest.predicate = NSPredicate(format: "id == %@", session.id as NSUUID)
         let user = try #require(try context.fetch(userRequest).first)

@@ -10,10 +10,10 @@ import Testing
 @MainActor
 struct LoginViewModelTests {
     @Test func signInWithEmptyFieldsSetsError() {
-        TestPersistence.makeSeededSession()
+        let (persistence, _) = TestPersistence.makeSeeded()
         let session = SessionStore()
         let viewModel = LoginViewModel(
-            authService: AuthService(context: TestPersistence.viewContext),
+            authService: AuthService(context: persistence.container.viewContext),
             session: session
         )
 
@@ -24,10 +24,10 @@ struct LoginViewModelTests {
     }
 
     @Test func signInWithInvalidCredentialsSetsError() {
-        TestPersistence.makeSeededSession()
+        let (persistence, _) = TestPersistence.makeSeeded()
         let session = SessionStore()
         let viewModel = LoginViewModel(
-            authService: AuthService(context: TestPersistence.viewContext),
+            authService: AuthService(context: persistence.container.viewContext),
             session: session
         )
         viewModel.login = "elena.kuznetsova"
@@ -40,10 +40,10 @@ struct LoginViewModelTests {
     }
 
     @Test func signInTrimsLoginWhitespace() {
-        TestPersistence.makeSeededSession()
+        let (persistence, _) = TestPersistence.makeSeeded()
         let session = SessionStore()
         let viewModel = LoginViewModel(
-            authService: AuthService(context: TestPersistence.viewContext),
+            authService: AuthService(context: persistence.container.viewContext),
             session: session
         )
         viewModel.login = "  elena.kuznetsova  "
@@ -55,8 +55,9 @@ struct LoginViewModelTests {
     }
 
     @Test func faceIDTappedShowsAlert() {
+        let persistence = TestPersistence.makeInMemory()
         let viewModel = LoginViewModel(
-            authService: AuthService(context: TestPersistence.viewContext),
+            authService: AuthService(context: persistence.container.viewContext),
             session: SessionStore()
         )
 
@@ -66,10 +67,10 @@ struct LoginViewModelTests {
     }
 
     @Test func signInWithValidCredentialsAuthenticatesUser() {
-        TestPersistence.makeSeededSession()
+        let (persistence, _) = TestPersistence.makeSeeded()
         let session = SessionStore()
         let viewModel = LoginViewModel(
-            authService: AuthService(context: TestPersistence.viewContext),
+            authService: AuthService(context: persistence.container.viewContext),
             session: session
         )
         viewModel.login = "elena.kuznetsova"
