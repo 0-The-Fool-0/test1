@@ -55,7 +55,10 @@ final class BankAppUITests: XCTestCase {
     XCTAssertTrue(accountsLink.waitForExistence(timeout: 5))
     accountsLink.tap()
 
-    let cards = app.descendants(matching: .any).matching(identifier: AccessibilityID.accountCard)
+    let accountsList = app.descendants(matching: .any)[AccessibilityID.accountsList]
+    XCTAssertTrue(accountsList.waitForExistence(timeout: 8))
+
+    let cards = accountsList.descendants(matching: .any).matching(identifier: AccessibilityID.accountCard)
     XCTAssertTrue(cards.element(boundBy: 0).waitForExistence(timeout: 8))
     XCTAssertGreaterThanOrEqual(cards.count, 5)
   }

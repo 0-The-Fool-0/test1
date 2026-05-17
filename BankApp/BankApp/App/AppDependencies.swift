@@ -24,7 +24,12 @@ final class AppDependencies: ObservableObject {
     }
 
     init(persistence: PersistenceController? = nil) {
-        let resolvedPersistence = persistence ?? (Self.isUITesting ? PersistenceController(inMemory: true) : .shared)
+        let resolvedPersistence = persistence ?? {
+            if Self.isUITesting || PersistenceController.isRunningUnitTests {
+                return .testing
+            }
+            return .shared
+        }()
         self.persistence = resolvedPersistence
         let context = resolvedPersistence.container.viewContext
         DataSeedService(context: context).seedIfNeeded()

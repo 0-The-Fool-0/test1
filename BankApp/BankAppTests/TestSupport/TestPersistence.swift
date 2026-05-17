@@ -9,7 +9,7 @@ import CoreData
 /// Single in-memory Core Data stack for the unit-test process.
 /// Avoids "Multiple NSEntityDescriptions" crashes when tests run in parallel in one host.
 enum TestPersistence {
-    static let controller = PersistenceController(inMemory: true)
+    static let controller = PersistenceController.testing
 
     static var viewContext: NSManagedObjectContext {
         controller.container.viewContext

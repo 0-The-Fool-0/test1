@@ -22,13 +22,14 @@ struct AccountsListView: View {
                     AccountCardView(account: account)
                 }
             }
-            .accessibilityIdentifier(AccessibilityID.accountsList)
             .padding(.horizontal, 18)
             .padding(.bottom, 24)
         }
+        .accessibilityIdentifier(AccessibilityID.accountsList)
         .background(Color.bankCardBackground)
         .navigationTitle("accounts.title")
         .navigationBarTitleDisplayMode(.large)
+        .onAppear { viewModel.reload() }
     }
 }
 

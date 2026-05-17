@@ -9,6 +9,9 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
 
+    /// Single in-memory stack for XCTest host and `-UITesting` launches.
+    static let testing = PersistenceController(inMemory: true)
+
     @MainActor
     static let preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
@@ -16,6 +19,10 @@ struct PersistenceController {
         DataSeedService(context: context).seedIfNeeded()
         return controller
     }()
+
+    static var isRunningUnitTests: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
 
     let container: NSPersistentContainer
 

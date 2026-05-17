@@ -48,7 +48,8 @@ struct AccountCardView: View {
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .stroke(Color.bankFieldBorder, lineWidth: 1)
         )
-        .accessibilityElement(children: .contain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(account.title) · \(account.subtitle)")
         .accessibilityIdentifier(AccessibilityID.accountCard)
     }
 }

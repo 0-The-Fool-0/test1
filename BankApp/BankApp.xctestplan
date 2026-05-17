@@ -52,21 +52,5 @@
       "name" : "BankApp"
     }
   },
-  "testTargets" : [
-    {
-      "target" : {
-        "containerPath" : "container:BankApp.xcodeproj",
-        "identifier" : "999BA89C2FB865DA00D242D7",
-        "name" : "BankAppTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:BankApp.xcodeproj",
-        "identifier" : "999BA8A62FB865DA00D242D7",
-        "name" : "BankAppUITests"
-      }
-    }
-  ],
   "version" : 1
 }
